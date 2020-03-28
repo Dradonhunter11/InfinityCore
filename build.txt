@@ -1,0 +1,3 @@
+displayName = Infinity Core
+author = TUA Team
+version = 0.1

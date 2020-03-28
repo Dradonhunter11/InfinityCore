@@ -1,0 +1,16 @@
+The TUA and TML 64bit team bring you a library that aim to enchance your game even more while also helping modder to do stuff that was previously considered as impossible
+
+== v.0.1 - Initial Release ==
+- Basic concept of autloading
+- Even more world gen option for modder (create your own custom world) (Thanks dan yami for the idea!)
+-- Modder will have the option to add preview to their custom world!
+-- Remember this is not user friendly for modder, what do you expect after all? Create the world in 7 days?
+-- Unlock condition for those world gen type (modder)
+-- Have access to the folder of other world if the player have it unlocked
+
+** Planned feature **
+- ROI Tree hook implemention (aka those cool glowmask!)
+- Old Achievement Library implementation but improved (cause I'm not implementing the proper one)
+- Custom event support (like rain event, moon event, sun event and wave based event)
+- Terra Energy API 2.0
+- Dimension, maybe, probably but maybe
