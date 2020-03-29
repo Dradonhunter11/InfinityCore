@@ -92,6 +92,15 @@ namespace InfinityCore.Worlds.Chunk
             foreach (KeyValuePair<string, ModChunk> missingChunk in missingChunks)
             {
                 ModChunk newChunk = (ModChunk) Activator.CreateInstance(missingChunk.Value.GetType());
+                if (!newChunk.CanExist)
+                {
+                    continue;
+                }
+
+                if (WorldGen.gen && newChunk.ImpactWorldGen)
+                {
+                    InfinityCoreWorld.generationChunks.Add(newChunk);
+                }
                 modChunk.Add(newChunk);
             }
         }

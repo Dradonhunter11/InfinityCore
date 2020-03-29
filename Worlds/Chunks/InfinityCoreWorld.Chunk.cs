@@ -24,6 +24,8 @@ namespace InfinityCore.Worlds
 
         internal static List<Chunk.Chunk> activeChunksList = new List<Chunk.Chunk>();
 
+        internal static List<ModChunk> generationChunks = new List<ModChunk>();
+
         private TagCompound SaveChunk()
         {
             TagCompound tag = new TagCompound();
@@ -117,8 +119,18 @@ namespace InfinityCore.Worlds
             CreateChunk();
         }
 
+        private void GenerateChunk(GenerationProgress progress = null)
+        {
+            generationChunks.Sort();
+            foreach (var chunks in generationChunks)
+            {
+                chunks.Generate(progress);
+            }
+        }
+
         private void CreateChunk()
         {
+            
             for (int i = 0; i < Main.maxTilesX; i += 200)
             {
                 for (int j = 0; j < Main.maxTilesY; j += 150)
@@ -126,6 +138,7 @@ namespace InfinityCore.Worlds
                     Chunk.Chunk newChunk = new Chunk.Chunk(i, j);
                     newChunk.AddMissingModChunk();
                     mod.Logger.Info(newChunk.chunkInternalName);
+                    
                     chunkList.Add(newChunk.chunkInternalName, newChunk);
                 }
             }

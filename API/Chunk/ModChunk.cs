@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Terraria.World.Generation;
 using InfinityCore.Worlds.Chunk;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
@@ -13,14 +14,26 @@ namespace InfinityCore.API.Chunks
         /// </summary>
         public virtual bool IsGlobal => false;
 
-        public readonly int WIDTH = Worlds.Chunk.Chunk.SIZE_X;
-        public readonly int HEIGHT = Worlds.Chunk.Chunk.SIZE_Y;
+        public readonly int width = Worlds.Chunk.Chunk.SIZE_X;
+        public readonly int height = Worlds.Chunk.Chunk.SIZE_Y;
 
-        public Chunk chunk { get; internal set; }
+        /// <summary>
+        /// Allow this Mod Chunk type to impact world gen
+        /// </summary>
+        public virtual bool ImpactWorldGen => true;
+
+        /// <summary>
+        /// Set it to true so that the world generate with this type ModChunk, can be used for example for debugging or if you want to get fancy with other library like Subworld Library
+        /// </summary>
+        public virtual bool CanExist => false; 
+
+        /// <summary>
+        /// This is the chunk that this instance of the mod chunk is stored currently
+        /// </summary>
+        public Chunk Chunk { get; internal set; }
 
         public virtual void Initialize()
         {
-
         }
 
         public virtual TagCompound Save()
@@ -55,6 +68,11 @@ namespace InfinityCore.API.Chunks
         /// Allow you to execute special drawing in the chunk, for example special effect when someone in a chunk
         /// </summary>
         public virtual void Draw(SpriteBatch sb, Worlds.Chunk.Chunk chunk)
+        {
+
+        }
+
+        public virtual void Generate(GenerationProgress progress = null)
         {
 
         }

@@ -44,6 +44,7 @@ namespace InfinityCore.Worlds
 			WorldGenLoader.CreatePassList(tasks, totalWeight);
 
             tasks.Add(new PassLegacy("Creating Chunk", p => CreateChunk(p)));
+            tasks.Add(new PassLegacy("ModChunck World Generation", p => GenerateChunk(p)));
 		}
 
         public override void Initialize()
