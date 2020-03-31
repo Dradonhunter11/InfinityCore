@@ -17,7 +17,7 @@ using Terraria.World.Generation;
 
 namespace InfinityCore.Worlds
 {
-	partial class InfinityCoreWorld : ModWorld
+	public partial class InfinityCoreWorld : ModWorld
 	{
         internal static string worldGenType = "default";
 
@@ -25,18 +25,24 @@ namespace InfinityCore.Worlds
 
         internal static bool isSaving = false;
 
-        internal Chunk.Chunk this[int x, int y]
+        public Chunk.Chunk this[int x, int y]
         {
-            get => chunkList[$"region{x / 200}{y / 150}"];
+            get
+            {
+                mod.Logger.Info($"region-{(int)(x / Chunk.Chunk.sizeX)}-{(int)(y / Chunk.Chunk.sizeY)}");
+                return chunkList[$"region-{(int) (x / Chunk.Chunk.sizeX)}-{(int) (y / Chunk.Chunk.sizeY)}"];
+            }
         }
 
-        
 
-		public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight)
-		{   
-            tasks.Add(new PassLegacy("Creating Chunk", p => CreateChunk(p)));
-			if (worldGenType == "default")
+        public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight)
+        {
+            preChunkGeneration = true;
+            specialPostChunkGenPasses.Clear();
+            if (worldGenType == "default")
 			{
+                tasks.Add(new PassLegacy("Creating Chunk", p => CreateChunk(p)));
+                tasks.Add(new PassLegacy("ModChunk World Generation", p => GenerateChunk(p)));
 				return;
 			}
 			tasks.Clear();
@@ -44,7 +50,11 @@ namespace InfinityCore.Worlds
 			WorldGenLoader.CreatePassList(tasks, totalWeight);
 
             tasks.Add(new PassLegacy("Creating Chunk", p => CreateChunk(p)));
-            tasks.Add(new PassLegacy("ModChunck World Generation", p => GenerateChunk(p)));
+            foreach (GenPass specialPostChunkGenPass in specialPostChunkGenPasses)
+            {
+                tasks.Add(specialPostChunkGenPass);
+            }
+            tasks.Add(new PassLegacy("ModChunk World Generation", p => GenerateChunk(p)));
 		}
 
         public override void Initialize()

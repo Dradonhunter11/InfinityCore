@@ -8,6 +8,7 @@ using MonoMod.Utils;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.GameContent.UI.States;
+using Terraria.ModLoader;
 
 namespace InfinityCore.Helper.ReflectionHelper
 {
@@ -43,6 +44,18 @@ namespace InfinityCore.Helper.ReflectionHelper
 			}
 		}
 
+        internal static void InitializeAllStaticPostLoad(Assembly asm)
+        {
+            foreach (Type type in asm.GetTypes())
+            {
+                MethodInfo info = type.GetMethod("PostLoad", BindingFlags.Static | BindingFlags.NonPublic);
+                if (info != null)
+                {
+                    info.CreateDelegate(typeof(Action)).DynamicInvoke();
+                }
+            }
+        }
+
 		internal static void InvokeAllStaticUnload()
 		{
 			foreach (Delegate unload in staticUnload)
@@ -58,6 +71,18 @@ namespace InfinityCore.Helper.ReflectionHelper
 			LoadWorldSelectionReflection();
 		}
 
+        internal static void PostLoad()
+        {
+            if (ModLoader.Mods.Any(i => i.Name == "SubworldLibrary"))
+            {
+                Mod mod = ModLoader.GetMod("SubworldLibrary");
+                ReflectionHelper.fieldCache.Add(mod.GetModWorld("SLWorld").GetType(), new Dictionary<string, FieldInfo>()
+                {
+                    ["generator"] = mod.GetModWorld("SLWorld").GetType().GetField("generator", BindingFlags.NonPublic | BindingFlags.Static)
+                });
+            }
+        }
+
 		internal static void Unload()
 		{
 			fieldCache.Clear();
@@ -66,23 +91,31 @@ namespace InfinityCore.Helper.ReflectionHelper
 		}
 
 		private static void LoadWorldSelectionReflection()
-		{
-			fieldCache.Add(typeof(UIWorldSelect), new Dictionary<string, FieldInfo>()
-			{
-				["_worldList"] = typeof(UIWorldSelect).GetField("_worldList", BindingFlags.Instance | BindingFlags.NonPublic),
-				["_backPanel"] = typeof(UIWorldSelect).GetField("_backPanel", BindingFlags.NonPublic | BindingFlags.Instance)
-			});
+        {
+            AddFieldInfoCaches();
+            AddMethodInfoCaches();
+        }
 
-			fieldCache.Add(typeof(Main), new Dictionary<string, FieldInfo>()
-			{
-				["_worldSelectMenu"] = typeof(Main).GetField("_worldSelectMenu", BindingFlags.NonPublic | BindingFlags.Static)
-			});
+        private static void AddMethodInfoCaches()
+        {
+            methodCache.Add(typeof(UIWorldSelect), new Dictionary<string, Delegate>()
+            {
+                ["UpdateWorldList"] = typeof(UIWorldSelect).GetMethod("UpdateWorldsList", BindingFlags.NonPublic | BindingFlags.Instance).CreateDelegate(typeof(Action), fieldCache[typeof(Main)]["_worldSelectMenu"].GetValue(null))
+            });
+        }
 
+        private static void AddFieldInfoCaches()
+        {
+            fieldCache.Add(typeof(UIWorldSelect), new Dictionary<string, FieldInfo>()
+            {
+                ["_worldList"] = typeof(UIWorldSelect).GetField("_worldList", BindingFlags.Instance | BindingFlags.NonPublic),
+                ["_backPanel"] = typeof(UIWorldSelect).GetField("_backPanel", BindingFlags.NonPublic | BindingFlags.Instance)
+            });
 
-			methodCache.Add(typeof(UIWorldSelect), new Dictionary<string, Delegate>()
-			{
-				["UpdateWorldList"] = typeof(UIWorldSelect).GetMethod("UpdateWorldsList", BindingFlags.NonPublic | BindingFlags.Instance).CreateDelegate(typeof(Action), fieldCache[typeof(Main)]["_worldSelectMenu"].GetValue(null))
-			});
-		}
-	}
+            fieldCache.Add(typeof(Main), new Dictionary<string, FieldInfo>()
+            {
+                ["_worldSelectMenu"] = typeof(Main).GetField("_worldSelectMenu", BindingFlags.NonPublic | BindingFlags.Static)
+            });
+        }
+    }
 }

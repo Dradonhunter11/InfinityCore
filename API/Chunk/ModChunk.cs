@@ -14,8 +14,8 @@ namespace InfinityCore.API.Chunks
         /// </summary>
         public virtual bool IsGlobal => false;
 
-        public readonly int width = Worlds.Chunk.Chunk.SIZE_X;
-        public readonly int height = Worlds.Chunk.Chunk.SIZE_Y;
+        public readonly int width = Worlds.Chunk.Chunk.sizeX;
+        public readonly int height = Worlds.Chunk.Chunk.sizeY;
 
         /// <summary>
         /// Allow this Mod Chunk type to impact world gen

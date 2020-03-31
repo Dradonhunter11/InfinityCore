@@ -1,10 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using InfinityCore.API.Loader;
+using InfinityCore.API.ModCompatibility;
 using InfinityCore.Helper.Injection;
 using InfinityCore.Helper.ReflectionHelper;
+using InfinityCore.Worlds;
 using Terraria.ModLoader;
+using Terraria.World.Generation;
 
 namespace InfinityCore
 {
@@ -27,6 +31,17 @@ namespace InfinityCore
                 ReflectionHelper.InitializeAllStaticLoad(allStaticLoaderEnabledMod);
             }
             LoadContent();
+        }
+
+        public override void PostAddRecipes()
+        {
+            foreach (Assembly allStaticLoaderEnabledMod in GetAllStaticLoaderEnabledMods())
+            {
+                ReflectionHelper.InitializeAllStaticPostLoad(allStaticLoaderEnabledMod);
+            }
+
+            SubworldLibraryInjection.PreSubworldAddGenerationPass += InfinityCoreWorld.PreSubworldGen;
+            SubworldLibraryInjection.PostSubworldAddGenerationPass += InfinityCoreWorld.PostSubworldGen;
         }
 
         private List<Assembly> GetAllStaticLoaderEnabledMods()
@@ -56,5 +71,17 @@ namespace InfinityCore
 			ReflectionHelper.InvokeAllStaticUnload();
 			instance = null;
 		}
+
+        public override object Call(params object[] args)
+        {
+            string command = args[0] as string;
+            switch (command)
+            {
+                case "SetCustomChunkSize":
+                    InfinityCoreWorld.SetChunkSize((int)args[1], (int)args[2]);
+                    break;
+            }
+            return base.Call(args);
+        }
     }
 }

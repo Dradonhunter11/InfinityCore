@@ -11,13 +11,14 @@ using InfinityCore.Players;
 using InfinityCore.Worlds.Chunk;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.GameContent.Generation;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.World.Generation;
 
 namespace InfinityCore.Worlds
 {
-    partial class InfinityCoreWorld : ModWorld
+    public partial class InfinityCoreWorld : ModWorld
     {
 
         internal static Dictionary<string, Chunk.Chunk> chunkList = new Dictionary<string, Chunk.Chunk>();
@@ -25,6 +26,10 @@ namespace InfinityCore.Worlds
         internal static List<Chunk.Chunk> activeChunksList = new List<Chunk.Chunk>();
 
         internal static List<ModChunk> generationChunks = new List<ModChunk>();
+
+        internal static bool preChunkGeneration = false;
+
+        public static List<GenPass> specialPostChunkGenPasses = new List<GenPass>();
 
         private TagCompound SaveChunk()
         {
@@ -39,7 +44,6 @@ namespace InfinityCore.Worlds
                     ["chunkData"] = chunkList[chunkPosition].Save()
                 });
             }
-
             return tag;
         }
 
@@ -113,35 +117,67 @@ namespace InfinityCore.Worlds
             }
         }
 
-        private void CreateChunk(GenerationProgress progress = null)
+        private static void CreateChunk(GenerationProgress progress = null)
         {
+            preChunkGeneration = false;
             progress.Message = "Dividing the world in section";
             CreateChunk();
         }
 
-        private void GenerateChunk(GenerationProgress progress = null)
+        private static void GenerateChunk(GenerationProgress progress = null)
         {
-            generationChunks.Sort();
+            //generationChunks.Sort();
             foreach (var chunks in generationChunks)
             {
                 chunks.Generate(progress);
             }
         }
 
-        private void CreateChunk()
+        private static void CreateChunk()
         {
             
-            for (int i = 0; i < Main.maxTilesX; i += 200)
+            for (int i = 0; i < Main.maxTilesX; i += Chunk.Chunk.sizeX)
             {
-                for (int j = 0; j < Main.maxTilesY; j += 150)
+                for (int j = 0; j < Main.maxTilesY; j += Chunk.Chunk.sizeY)
                 {
                     Chunk.Chunk newChunk = new Chunk.Chunk(i, j);
                     newChunk.AddMissingModChunk();
-                    mod.Logger.Info(newChunk.chunkInternalName);
-                    
                     chunkList.Add(newChunk.chunkInternalName, newChunk);
                 }
             }
+        }
+
+        public static void SetChunkSize(int x, int y)
+        {
+            if (!WorldGen.gen)
+            {
+                throw new Exception("Attempt to modify world Chunk cannot be done outside of world generation");
+            }
+
+            if (!preChunkGeneration)
+            {
+                throw new Exception("Attempt to modify world Chunk after the chunk have been generated, ensure that you modify before the chunk generation. Insert your world gen phase before \"Creating Chunk\"");
+            }
+            Chunk.Chunk.sizeX = x;
+            Chunk.Chunk.sizeY = y;
+        }
+
+        public static void PreSubworldGen(WorldGenerator generator)
+        {
+            preChunkGeneration = true;
+            InfinityCore.instance.Logger.Info("Pre Subworld Gen hook work!");
+            
+        }
+
+        public static void PostSubworldGen(WorldGenerator generator)
+        {
+            generator.Append(new PassLegacy("Creating Chunk", p => CreateChunk(p)));
+            foreach (GenPass specialPostChunkGenPass in specialPostChunkGenPasses)
+            {
+                generator.Append(specialPostChunkGenPass);
+            }
+            generator.Append(new PassLegacy("ModChunck World Generation", p => GenerateChunk(p)));
+            generator.Append(new PassLegacy("clear special post gen list", p => specialPostChunkGenPasses.Clear()));
         }
     }
 }

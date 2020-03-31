@@ -24,8 +24,8 @@ namespace InfinityCore.Worlds.Chunk
 
         internal string chunkInternalName;
 
-        internal const int SIZE_X = 200;
-        internal const int SIZE_Y = 150;
+        internal static int sizeX = 200;
+        internal static int sizeY = 150;
 
         internal List<ModChunk> modChunk = new List<ModChunk>();
         internal List<Player> activePlayer = new List<Player>();
@@ -36,7 +36,7 @@ namespace InfinityCore.Worlds.Chunk
         {
             this.x = x;
             this.y = y;
-            chunkInternalName = $"region-{x / SIZE_X}-{y / SIZE_Y}";
+            chunkInternalName = $"region-{x / sizeX}-{y / sizeY}";
         }
 
         public T GetModChunk<T>() where T : ModChunk => (T) modChunk.SingleOrDefault(i => i is T);
@@ -160,7 +160,7 @@ namespace InfinityCore.Worlds.Chunk
 
         internal bool CheckActivity(Player player)
         {
-            Rectangle rec = new Rectangle(x * 16, y *16, SIZE_X * 16, SIZE_Y * 16);
+            Rectangle rec = new Rectangle(x * 16, y *16, sizeX * 16, sizeY * 16);
             IsActive = rec.Contains(player.position.ToPoint());
             if (IsActive)
             {
@@ -174,7 +174,7 @@ namespace InfinityCore.Worlds.Chunk
             
             foreach (Player player in new List<Player>(activePlayer))
             {
-                Rectangle rec = new Rectangle(x * 16, y *16, SIZE_X * 16, SIZE_Y * 16);
+                Rectangle rec = new Rectangle(x * 16, y *16, sizeX * 16, sizeY * 16);
                 IsActive = rec.Contains(player.position.ToPoint());
                 if (!IsActive)
                 {
