@@ -1,9 +1,9 @@
-﻿using System.IO;
-using Terraria.World.Generation;
-using InfinityCore.Worlds.Chunk;
+﻿using InfinityCore.Worlds.Chunk;
 using Microsoft.Xna.Framework.Graphics;
+using System.IO;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using Terraria.World.Generation;
 
 namespace InfinityCore.API.Chunks
 {
@@ -25,7 +25,7 @@ namespace InfinityCore.API.Chunks
         /// <summary>
         /// Set it to true so that the world generate with this type ModChunk, can be used for example for debugging or if you want to get fancy with other library like Subworld Library
         /// </summary>
-        public virtual bool CanExist => false; 
+        public virtual bool CanExist => false;
 
         /// <summary>
         /// This is the chunk that this instance of the mod chunk is stored currently

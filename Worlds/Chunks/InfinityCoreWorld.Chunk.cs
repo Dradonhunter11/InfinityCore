@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using InfinityCore.API.Chunks;
-using InfinityCore.API.Loader;
+﻿using InfinityCore.API.Chunks;
 using InfinityCore.Players;
-using InfinityCore.Worlds.Chunk;
-using Microsoft.Xna.Framework;
+using System;
+using System.Collections.Generic;
+using System.Threading;
 using Terraria;
 using Terraria.GameContent.Generation;
 using Terraria.ModLoader;
@@ -87,7 +80,7 @@ namespace InfinityCore.Worlds
                         chunk.Update();
                         chunk.CheckActivity();
                     }
-                    
+
                 }
             }
 
@@ -104,7 +97,7 @@ namespace InfinityCore.Worlds
                 List<Chunk.Chunk> activeChunkList = new List<Chunk.Chunk>();
                 foreach (var player in Main.player)
                 {
-                    
+
                     if (player == null)
                     {
                         continue;
@@ -135,7 +128,7 @@ namespace InfinityCore.Worlds
 
         private static void CreateChunk()
         {
-            
+
             for (int i = 0; i < Main.maxTilesX; i += Chunk.Chunk.sizeX)
             {
                 for (int j = 0; j < Main.maxTilesY; j += Chunk.Chunk.sizeY)
@@ -166,7 +159,7 @@ namespace InfinityCore.Worlds
         {
             preChunkGeneration = true;
             InfinityCore.instance.Logger.Info("Pre Subworld Gen hook work!");
-            
+
         }
 
         public static void PostSubworldGen(WorldGenerator generator)

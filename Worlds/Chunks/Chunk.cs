@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using InfinityCore.API.Chunks;
+﻿using InfinityCore.API.Chunks;
 using InfinityCore.API.Loader;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
@@ -39,8 +36,8 @@ namespace InfinityCore.Worlds.Chunk
             chunkInternalName = $"region-{x / sizeX}-{y / sizeY}";
         }
 
-        public T GetModChunk<T>() where T : ModChunk => (T) modChunk.SingleOrDefault(i => i is T);
-        
+        public T GetModChunk<T>() where T : ModChunk => (T)modChunk.SingleOrDefault(i => i is T);
+
 
         public TagCompound Save()
         {
@@ -69,7 +66,7 @@ namespace InfinityCore.Worlds.Chunk
             {
                 if (ChunkLoader.chunkDictionnary.ContainsKey(keyValuePair.Key))
                 {
-                    ModChunk chunk = (ModChunk) Activator.CreateInstance(keyValuePair.Value.GetType());
+                    ModChunk chunk = (ModChunk)Activator.CreateInstance(keyValuePair.Value.GetType());
                     chunk.Load(data.GetCompound(keyValuePair.Key));
                     modChunk.Add(chunk);
                 }
@@ -91,7 +88,7 @@ namespace InfinityCore.Worlds.Chunk
 
             foreach (KeyValuePair<string, ModChunk> missingChunk in missingChunks)
             {
-                ModChunk newChunk = (ModChunk) Activator.CreateInstance(missingChunk.Value.GetType());
+                ModChunk newChunk = (ModChunk)Activator.CreateInstance(missingChunk.Value.GetType());
                 if (!newChunk.CanExist)
                 {
                     continue;
@@ -114,7 +111,7 @@ namespace InfinityCore.Worlds.Chunk
                     continue;
                 }
                 chunk.Update();
-            }    
+            }
         }
 
         internal void Draw(SpriteBatch spriteBatch)
@@ -160,7 +157,7 @@ namespace InfinityCore.Worlds.Chunk
 
         internal bool CheckActivity(Player player)
         {
-            Rectangle rec = new Rectangle(x * 16, y *16, sizeX * 16, sizeY * 16);
+            Rectangle rec = new Rectangle(x * 16, y * 16, sizeX * 16, sizeY * 16);
             IsActive = rec.Contains(player.position.ToPoint());
             if (IsActive)
             {
@@ -171,15 +168,15 @@ namespace InfinityCore.Worlds.Chunk
 
         internal void CheckActivity()
         {
-            
+
             foreach (Player player in new List<Player>(activePlayer))
             {
-                Rectangle rec = new Rectangle(x * 16, y *16, sizeX * 16, sizeY * 16);
+                Rectangle rec = new Rectangle(x * 16, y * 16, sizeX * 16, sizeY * 16);
                 IsActive = rec.Contains(player.position.ToPoint());
                 if (!IsActive)
                 {
                     activePlayer.Remove(player);
-                } 
+                }
             }
         }
     }

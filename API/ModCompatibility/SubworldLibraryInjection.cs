@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using InfinityCore.Helper.ReflectionHelper;
+﻿using InfinityCore.Helper.ReflectionHelper;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using MonoMod.RuntimeDetour.HookGen;
+using System;
+using System.Linq;
+using System.Reflection;
 using Terraria.ModLoader;
 using Terraria.World.Generation;
 
@@ -15,7 +12,7 @@ namespace InfinityCore.API.ModCompatibility
 {
     public static class SubworldLibraryInjection
     {
-        internal static Mod SubWorldLibrary; 
+        internal static Mod SubWorldLibrary;
 
         internal delegate void orig_LoadSubworld(string path, bool fromCloud);
         internal delegate void hook_LoadSubworld(orig_LoadSubworld orig, string path, bool fromCloud);
@@ -77,7 +74,7 @@ namespace InfinityCore.API.ModCompatibility
             PostSubworldAddGenerationPassHook(c);
         }
 
-        
+
 
         private static void PreSubworldAddGenerationPassHook(ILCursor c)
         {
@@ -90,8 +87,8 @@ namespace InfinityCore.API.ModCompatibility
                 InfinityCore.instance.Logger.Info("PreSubworldAddGenerationPassHook added");
                 c.EmitDelegate<Action>(() =>
                 {
-                    
-                    WorldGenerator generator = (WorldGenerator) ReflectionHelper.fieldCache[SubWorldLibrary.GetModWorld("SLWorld").GetType()]["generator"].GetValue(null);
+
+                    WorldGenerator generator = (WorldGenerator)ReflectionHelper.fieldCache[SubWorldLibrary.GetModWorld("SLWorld").GetType()]["generator"].GetValue(null);
                     PreSubworldAddGenerationPass(generator);
                 });
             }
@@ -105,7 +102,7 @@ namespace InfinityCore.API.ModCompatibility
                 InfinityCore.instance.Logger.Info("PostSubworldAddGenerationPassHook added");
                 c.EmitDelegate<Action>(() =>
                 {
-                    WorldGenerator generator = (WorldGenerator) ReflectionHelper.fieldCache[SubWorldLibrary.GetModWorld("SLWorld").GetType()]["generator"].GetValue(null);
+                    WorldGenerator generator = (WorldGenerator)ReflectionHelper.fieldCache[SubWorldLibrary.GetModWorld("SLWorld").GetType()]["generator"].GetValue(null);
                     PostSubworldAddGenerationPass(generator);
                 });
             }

@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using InfinityCore.API.Chunks;
-using InfinityCore.API.WorldGen;
+﻿using InfinityCore.API.Chunks;
 using InfinityCore.Worlds;
-using InfinityCore.Worlds.Chunk;
 using Microsoft.Xna.Framework;
+using System;
+using System.Collections.Generic;
 
 namespace InfinityCore.API.Loader
 {
@@ -17,7 +12,7 @@ namespace InfinityCore.API.Loader
 
         internal static void RegisterModChunk(Type type)
         {
-            ModChunk chunk = (ModChunk) Activator.CreateInstance(type);
+            ModChunk chunk = (ModChunk)Activator.CreateInstance(type);
             chunkDictionnary.Add(type.FullName, chunk);
         }
 

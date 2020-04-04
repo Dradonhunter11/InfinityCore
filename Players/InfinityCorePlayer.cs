@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using InfinityCore.Worlds;
+﻿using InfinityCore.Worlds;
 using InfinityCore.Worlds.Chunk;
 using Microsoft.Xna.Framework;
+using System;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -25,8 +21,8 @@ namespace InfinityCore.Players
         {
             try
             {
-                Vector2 vector = new Vector2((int) self.position.X / 16 / Chunk.sizeX, (int) self.position.Y / 16 / Chunk.sizeY);
-                return InfinityCoreWorld.chunkList[$"region{((int) self.position.X / 16 / Chunk.sizeX)}{((int) self.position.Y / 16 / Chunk.sizeY)}"];
+                Vector2 vector = new Vector2((int)self.position.X / 16 / Chunk.sizeX, (int)self.position.Y / 16 / Chunk.sizeY);
+                return InfinityCoreWorld.chunkList[$"region{((int)self.position.X / 16 / Chunk.sizeX)}{((int)self.position.Y / 16 / Chunk.sizeY)}"];
             }
             catch (Exception e)
             {

@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using InfinityCore.API.Interface;
+﻿using InfinityCore.API.Interface;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
 using Terraria.ModLoader;
 
 namespace InfinityCore.API.Loader
@@ -31,7 +28,7 @@ namespace InfinityCore.API.Loader
             InjectionTreeTopHook(c);
 
             c = new ILCursor(il);
-            
+
             InjectionTreeBranchHook(c);
         }
 
@@ -40,7 +37,7 @@ namespace InfinityCore.API.Loader
             c.Index = 0;
             int treeBranchType = 0;
 
-            if(c.TryGotoNext(i => i.MatchCall(out _),
+            if (c.TryGotoNext(i => i.MatchCall(out _),
                 i => i.MatchLdfld(out _),
                 i => i.MatchLdloc(out _),
                 i => i.MatchNop(),
@@ -64,7 +61,7 @@ namespace InfinityCore.API.Loader
 
             if (c.TryGotoNext(
                 i => i.MatchCallvirt(typeof(SpriteBatch), "Draw"),
-                i => i.MatchBr(out _), 
+                i => i.MatchBr(out _),
                 i => i.MatchLdloc(out _),
                 i => i.MatchNop(),
                 i => i.MatchNop(),
@@ -81,7 +78,7 @@ namespace InfinityCore.API.Loader
                 });
             }
 
-            if(c.TryGotoNext(i => i.MatchCall(out _),
+            if (c.TryGotoNext(i => i.MatchCall(out _),
                 i => i.MatchLdfld(out _),
                 i => i.MatchLdloc(out _),
                 i => i.MatchNop(),
@@ -165,7 +162,7 @@ namespace InfinityCore.API.Loader
 
             if (c.TryGotoNext(
                 i => i.MatchCallvirt(typeof(SpriteBatch), "Draw"),
-                i => i.MatchBr(out _), 
+                i => i.MatchBr(out _),
                 i => i.MatchLdloc(out _),
                 i => i.MatchNop(),
                 i => i.MatchNop(),

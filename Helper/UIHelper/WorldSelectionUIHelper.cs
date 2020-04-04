@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using InfinityCore.UI;
+﻿using InfinityCore.UI;
 using InfinityCore.UI.WorldSelectUI;
 using Microsoft.Xna.Framework;
+using System.Collections.Generic;
+using System.IO;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.GameContent.UI.States;
@@ -14,9 +10,9 @@ using Terraria.UI;
 
 namespace InfinityCore.Helper.UIHelper
 {
-	class WorldSelectionUIHelper
-	{
-		internal static string currentPath = Main.WorldPath;
+    class WorldSelectionUIHelper
+    {
+        internal static string currentPath = Main.WorldPath;
 
         internal static string originalPath = Path.Combine(Main.SavePath, "Worlds");
 
@@ -30,19 +26,19 @@ namespace InfinityCore.Helper.UIHelper
         internal static readonly List<UIElement> worldListElements = new List<UIElement>();
 
         internal static void GoBackClick(UIMouseEvent evt, UIElement listeningElement)
-		{
-			Main.PlaySound(11, -1, -1, 1, 1f, 0f);
-			if (currentPath != originalPath)
-			{
-				currentPath = originalPath;
+        {
+            Main.PlaySound(11, -1, -1, 1, 1f, 0f);
+            if (currentPath != originalPath)
+            {
+                currentPath = originalPath;
                 Main.WorldPath = originalPath;
-                Main.LoadWorlds(); 
+                Main.LoadWorlds();
                 ReflectionHelper.ReflectionHelper.methodCache[typeof(UIWorldSelect)]["UpdateWorldList"].DynamicInvoke(new object[] { });
                 needUpdate = true;
                 return;
             }
             Main.menuMode = (Main.menuMultiplayer ? 12 : 1);
-		}
+        }
 
         internal static int SortElement(UIElement element1, UIElement element2)
         {
@@ -106,17 +102,17 @@ namespace InfinityCore.Helper.UIHelper
 
         internal static bool CheckForIllegalCharacter()
         {
-            return !textField.CurrentString.Contains("<") || 
-                   !textField.CurrentString.Contains(">") || 
-                   !textField.CurrentString.Contains(":") || 
-                   !textField.CurrentString.Contains("\"") || 
-                   !textField.CurrentString.Contains("/") || 
-                   !textField.CurrentString.Contains("\\") || 
-                   !textField.CurrentString.Contains("|") || 
-                   !textField.CurrentString.Contains("?") || 
+            return !textField.CurrentString.Contains("<") ||
+                   !textField.CurrentString.Contains(">") ||
+                   !textField.CurrentString.Contains(":") ||
+                   !textField.CurrentString.Contains("\"") ||
+                   !textField.CurrentString.Contains("/") ||
+                   !textField.CurrentString.Contains("\\") ||
+                   !textField.CurrentString.Contains("|") ||
+                   !textField.CurrentString.Contains("?") ||
                    !textField.CurrentString.Contains("*");
         }
 
-		//public static void AddFolderToTheList
-	}
+        //public static void AddFolderToTheList
+    }
 }

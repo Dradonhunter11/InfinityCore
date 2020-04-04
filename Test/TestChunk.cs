@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using InfinityCore.API.Chunks;
+﻿using InfinityCore.API.Chunks;
 using InfinityCore.Worlds.Chunk;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Graphics;
+using System.IO;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
@@ -21,7 +16,7 @@ namespace InfinityCore.Test
 
         public override void Draw(SpriteBatch sb, Chunk chunk)
         {
-            Vector2 chunkPosition = chunk.Position * 16 + new Vector2(75 *16, 100 * 16) - Main.screenPosition;
+            Vector2 chunkPosition = chunk.Position * 16 + new Vector2(75 * 16, 100 * 16) - Main.screenPosition;
             sb.DrawString(Main.fontDeathText, $"Test number for this chunk:{rng}", chunkPosition, Color.White);
         }
 

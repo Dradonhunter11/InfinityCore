@@ -1,30 +1,25 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using InfinityCore.API.Loader;
 using InfinityCore.API.ModCompatibility;
-using InfinityCore.Helper.Injection;
 using InfinityCore.Helper.ReflectionHelper;
 using InfinityCore.Worlds;
+using System.Collections.Generic;
+using System.Reflection;
 using Terraria.ModLoader;
-using Terraria.World.Generation;
 
 namespace InfinityCore
 {
-	partial class InfinityCore : Mod
-	{
-		internal static InfinityCore instance;
+    partial class InfinityCore : Mod
+    {
+        internal static InfinityCore instance;
 
         public static bool EnableInfinityCoreStaticLoader = true;
 
-		public InfinityCore()
-		{
-			instance = this;
-		}
+        public InfinityCore()
+        {
+            instance = this;
+        }
 
-		public override void Load()
-		{
+        public override void Load()
+        {
             instance = this;
             foreach (Assembly allStaticLoaderEnabledMod in GetAllStaticLoaderEnabledMods())
             {
@@ -46,7 +41,7 @@ namespace InfinityCore
 
         private List<Assembly> GetAllStaticLoaderEnabledMods()
         {
-			List<Assembly> modList = new List<Assembly>();
+            List<Assembly> modList = new List<Assembly>();
             foreach (Mod mod in ModLoader.Mods)
             {
                 FieldInfo staticLoaderEnabledField = mod.GetType().GetField("EnableInfinityCoreStaticLoader", BindingFlags.Static | BindingFlags.Public);
@@ -67,10 +62,10 @@ namespace InfinityCore
         }
 
         public override void Unload()
-		{
-			ReflectionHelper.InvokeAllStaticUnload();
-			instance = null;
-		}
+        {
+            ReflectionHelper.InvokeAllStaticUnload();
+            instance = null;
+        }
 
         public override object Call(params object[] args)
         {

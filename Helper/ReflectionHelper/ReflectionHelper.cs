@@ -2,47 +2,43 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using MonoMod.Utils;
 using Terraria;
-using Terraria.GameContent.UI.Elements;
 using Terraria.GameContent.UI.States;
 using Terraria.ModLoader;
 
 namespace InfinityCore.Helper.ReflectionHelper
 {
-	internal delegate void UpdateWorldsList();
+    internal delegate void UpdateWorldsList();
 
-	static partial class ReflectionHelper
-	{
-		internal static Dictionary<Type, Dictionary<string, Delegate>> methodCache = new Dictionary<Type, Dictionary<string, Delegate>>();
-		internal static Dictionary<Type, Dictionary<string, PropertyInfo>> propertyCache = new Dictionary<Type, Dictionary<string, PropertyInfo>>();
-		internal static Dictionary<Type, Dictionary<string, FieldInfo>> fieldCache = new Dictionary<Type, Dictionary<string, FieldInfo>>();
-		/// <summary>
-		/// For mod injection later on
-		/// </summary>
-		internal static Dictionary<Type, Dictionary<string , Assembly>> assemblyCache = new Dictionary<Type, Dictionary<string, Assembly>>();
+    static partial class ReflectionHelper
+    {
+        internal static Dictionary<Type, Dictionary<string, Delegate>> methodCache = new Dictionary<Type, Dictionary<string, Delegate>>();
+        internal static Dictionary<Type, Dictionary<string, PropertyInfo>> propertyCache = new Dictionary<Type, Dictionary<string, PropertyInfo>>();
+        internal static Dictionary<Type, Dictionary<string, FieldInfo>> fieldCache = new Dictionary<Type, Dictionary<string, FieldInfo>>();
+        /// <summary>
+        /// For mod injection later on
+        /// </summary>
+        internal static Dictionary<Type, Dictionary<string, Assembly>> assemblyCache = new Dictionary<Type, Dictionary<string, Assembly>>();
 
-		public static List<Delegate> staticUnload = new List<Delegate>();
+        public static List<Delegate> staticUnload = new List<Delegate>();
 
-		internal static void InitializeAllStaticLoad(Assembly asm)
-		{
-			
-			foreach (Type type in asm.GetTypes())
-			{
-				MethodInfo info = type.GetMethod("Load", BindingFlags.Static | BindingFlags.NonPublic);
-				if (info != null)
-				{
-					info.CreateDelegate(typeof(Action)).DynamicInvoke();
-					info = type.GetMethod("Unload", BindingFlags.Static | BindingFlags.NonPublic);
-					if (info != null)
-					{
-						staticUnload.Add(info.CreateDelegate(typeof(Action)));
-					}
-				}
-			}
-		}
+        internal static void InitializeAllStaticLoad(Assembly asm)
+        {
+
+            foreach (Type type in asm.GetTypes())
+            {
+                MethodInfo info = type.GetMethod("Load", BindingFlags.Static | BindingFlags.NonPublic);
+                if (info != null)
+                {
+                    info.CreateDelegate(typeof(Action)).DynamicInvoke();
+                    info = type.GetMethod("Unload", BindingFlags.Static | BindingFlags.NonPublic);
+                    if (info != null)
+                    {
+                        staticUnload.Add(info.CreateDelegate(typeof(Action)));
+                    }
+                }
+            }
+        }
 
         internal static void InitializeAllStaticPostLoad(Assembly asm)
         {
@@ -56,20 +52,20 @@ namespace InfinityCore.Helper.ReflectionHelper
             }
         }
 
-		internal static void InvokeAllStaticUnload()
-		{
-			foreach (Delegate unload in staticUnload)
-			{
-				unload.DynamicInvoke();
-			}
+        internal static void InvokeAllStaticUnload()
+        {
+            foreach (Delegate unload in staticUnload)
+            {
+                unload.DynamicInvoke();
+            }
 
-			staticUnload.Clear();
-		}
+            staticUnload.Clear();
+        }
 
-		internal static void Load()
-		{
-			LoadWorldSelectionReflection();
-		}
+        internal static void Load()
+        {
+            LoadWorldSelectionReflection();
+        }
 
         internal static void PostLoad()
         {
@@ -83,14 +79,14 @@ namespace InfinityCore.Helper.ReflectionHelper
             }
         }
 
-		internal static void Unload()
-		{
-			fieldCache.Clear();
-			propertyCache.Clear();
-			methodCache.Clear();
-		}
+        internal static void Unload()
+        {
+            fieldCache.Clear();
+            propertyCache.Clear();
+            methodCache.Clear();
+        }
 
-		private static void LoadWorldSelectionReflection()
+        private static void LoadWorldSelectionReflection()
         {
             AddFieldInfoCaches();
             AddMethodInfoCaches();

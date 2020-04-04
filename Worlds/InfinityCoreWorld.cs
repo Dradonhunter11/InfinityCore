@@ -1,14 +1,8 @@
-﻿using System;
+﻿using InfinityCore.API.Loader;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using InfinityCore.API.Loader;
-using InfinityCore.API.WorldGen;
-using InfinityCore.Worlds.Chunk;
-using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.GameContent.Generation;
 using Terraria.ModLoader;
@@ -17,8 +11,8 @@ using Terraria.World.Generation;
 
 namespace InfinityCore.Worlds
 {
-	public partial class InfinityCoreWorld : ModWorld
-	{
+    public partial class InfinityCoreWorld : ModWorld
+    {
         internal static string worldGenType = "default";
 
         internal string currentSavePath;
@@ -30,7 +24,7 @@ namespace InfinityCore.Worlds
             get
             {
                 mod.Logger.Info($"region-{(int)(x / Chunk.Chunk.sizeX)}-{(int)(y / Chunk.Chunk.sizeY)}");
-                return chunkList[$"region-{(int) (x / Chunk.Chunk.sizeX)}-{(int) (y / Chunk.Chunk.sizeY)}"];
+                return chunkList[$"region-{(int)(x / Chunk.Chunk.sizeX)}-{(int)(y / Chunk.Chunk.sizeY)}"];
             }
         }
 
@@ -40,14 +34,14 @@ namespace InfinityCore.Worlds
             preChunkGeneration = true;
             specialPostChunkGenPasses.Clear();
             if (worldGenType == "default")
-			{
+            {
                 tasks.Add(new PassLegacy("Creating Chunk", p => CreateChunk(p)));
                 tasks.Add(new PassLegacy("ModChunk World Generation", p => GenerateChunk(p)));
-				return;
-			}
-			tasks.Clear();
+                return;
+            }
+            tasks.Clear();
 
-			WorldGenLoader.CreatePassList(tasks, totalWeight);
+            WorldGenLoader.CreatePassList(tasks, totalWeight);
 
             tasks.Add(new PassLegacy("Creating Chunk", p => CreateChunk(p)));
             foreach (GenPass specialPostChunkGenPass in specialPostChunkGenPasses)
@@ -55,7 +49,7 @@ namespace InfinityCore.Worlds
                 tasks.Add(specialPostChunkGenPass);
             }
             tasks.Add(new PassLegacy("ModChunk World Generation", p => GenerateChunk(p)));
-		}
+        }
 
         public override void Initialize()
         {
@@ -68,9 +62,9 @@ namespace InfinityCore.Worlds
         {
             isSaving = true;
             TagCompound tag = new TagCompound();
-			tag.Add("chunkData",SaveChunk());
+            tag.Add("chunkData", SaveChunk());
             isSaving = false;
-            
+
             return tag;
         }
 
@@ -88,7 +82,7 @@ namespace InfinityCore.Worlds
             mod.Logger.Info("Mod World Load end");
         }
 
-        
+
 
         //TODO: Put this in InfinityCoreWorld.Chunk.cs
         public override void PostDrawTiles()

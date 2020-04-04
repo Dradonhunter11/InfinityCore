@@ -1,27 +1,21 @@
-﻿using System;
-using System.CodeDom;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using InfinityCore.Helper.UIHelper;
+﻿using InfinityCore.Helper.UIHelper;
 using InfinityCore.UI.WorldSelectUI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using MonoMod.RuntimeDetour.HookGen;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.GameContent.UI.States;
-using Terraria.ModLoader.UI;
 using Terraria.UI;
 
 namespace InfinityCore.Helper.Injection
 {
-	static partial class Injection
-	{
+    static partial class Injection
+    {
         //To move in WorldSelectionUIHelper.cs?
         internal static UIElement newFolderElement;
         internal static Texture2D newFolderIcon;
@@ -46,9 +40,9 @@ namespace InfinityCore.Helper.Injection
 
             WorldSelectionUIHelper.uiWorldSelect = instance;
 
-            UIPanel reference = (UIPanel) ReflectionHelper.ReflectionHelper.fieldCache[typeof(UIWorldSelect)]["_backPanel"].GetValue(instance);
+            UIPanel reference = (UIPanel)ReflectionHelper.ReflectionHelper.fieldCache[typeof(UIWorldSelect)]["_backPanel"].GetValue(instance);
 
-            var del = (UIElement.MouseEvent) Delegate.CreateDelegate(typeof(UIElement.MouseEvent), ReflectionHelper.ReflectionHelper.fieldCache[typeof(Main)]["_worldSelectMenu"].GetValue(null), "GoBackClick");
+            var del = (UIElement.MouseEvent)Delegate.CreateDelegate(typeof(UIElement.MouseEvent), ReflectionHelper.ReflectionHelper.fieldCache[typeof(Main)]["_worldSelectMenu"].GetValue(null), "GoBackClick");
 
             reference.OnClick -= del;
 
@@ -71,9 +65,9 @@ namespace InfinityCore.Helper.Injection
             instance.Append(newFolderElement);
         }
 
-		internal static void Detour_UpdateWorldList(On.Terraria.GameContent.UI.States.UIWorldSelect.orig_UpdateWorldsList orig, UIWorldSelect instance)
-		{
-			orig(instance);
+        internal static void Detour_UpdateWorldList(On.Terraria.GameContent.UI.States.UIWorldSelect.orig_UpdateWorldsList orig, UIWorldSelect instance)
+        {
+            orig(instance);
             if (WorldSelectionUIHelper.currentPath == WorldSelectionUIHelper.originalPath)
             {
                 UIList reference = (UIList)ReflectionHelper.ReflectionHelper.fieldCache[typeof(UIWorldSelect)]["_worldList"].GetValue(instance);
@@ -109,7 +103,7 @@ namespace InfinityCore.Helper.Injection
                 return;
             }
             WorldSelectionUIHelper.needUpdate = false;
-            UIList reference = (UIList) ReflectionHelper.ReflectionHelper.fieldCache[typeof(UIWorldSelect)]["_worldList"].GetValue(instance as UIWorldSelect);
+            UIList reference = (UIList)ReflectionHelper.ReflectionHelper.fieldCache[typeof(UIWorldSelect)]["_worldList"].GetValue(instance as UIWorldSelect);
             reference.Clear();
             reference.AddRange(WorldSelectionUIHelper.worldListElements);
             instance.Recalculate();

@@ -1,12 +1,9 @@
-﻿using System;
+﻿using InfinityCore.Enums;
+using InfinityCore.Worlds;
+using InfinityCore.Worlds.Chunk;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using InfinityCore.Enums;
-using InfinityCore.Worlds;
-using InfinityCore.Worlds.Chunk;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
@@ -41,18 +38,18 @@ namespace InfinityCore
         /// <param name="whoAmI"></param>
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {
-            NetworkMessageID messageType = (NetworkMessageID) reader.ReadByte();
+            NetworkMessageID messageType = (NetworkMessageID)reader.ReadByte();
             switch (messageType)
             {
                 case NetworkMessageID.syncChunk:
-                    if(Main.netMode == NetmodeID.MultiplayerClient)
+                    if (Main.netMode == NetmodeID.MultiplayerClient)
                         SyncChunkClient(reader);
                     break;
                 case NetworkMessageID.regularChunkUpdate:
-                    if(Main.netMode == NetmodeID.MultiplayerClient)
+                    if (Main.netMode == NetmodeID.MultiplayerClient)
                         UpdateClientChunk(reader);
                     break;
-                
+
             }
         }
 
@@ -62,7 +59,7 @@ namespace InfinityCore
         /// </summary>
         private void SyncChunkServer(ModPacket packet)
         {
-            packet.Write((byte) NetworkMessageID.syncChunk);
+            packet.Write((byte)NetworkMessageID.syncChunk);
             int numberOfChunk = InfinityCoreWorld.chunkList.Count;
 
             for (int i = 0; i < numberOfChunk; i++)
@@ -80,14 +77,14 @@ namespace InfinityCore
         private void UpdateServerChunk(ModPacket packet)
         {
             List<Chunk> activeChunks = InfinityCoreWorld.chunkList.Values.Where(i => i.IsActive).ToList();
-            packet.Write((byte) NetworkMessageID.regularChunkUpdate);
+            packet.Write((byte)NetworkMessageID.regularChunkUpdate);
             packet.Write(activeChunks.Count);
             for (int i = 0; i < activeChunks.Count; i++)
             {
                 packet.Write(activeChunks[i].chunkInternalName);
                 activeChunks[i].NetSendChunk(packet);
             }
-            
+
         }
 
         /// <summary>
