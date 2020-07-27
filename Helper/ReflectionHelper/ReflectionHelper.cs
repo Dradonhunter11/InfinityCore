@@ -112,6 +112,57 @@ namespace InfinityCore.Helper.ReflectionHelper
             {
                 ["_worldSelectMenu"] = typeof(Main).GetField("_worldSelectMenu", BindingFlags.NonPublic | BindingFlags.Static)
             });
+
+            fieldCache.Add(typeof(BuffLoader), new Dictionary<string, FieldInfo>()
+            {
+                ["buffs"] = typeof(BuffLoader).GetField("buffs", BindingFlags.Static | BindingFlags.NonPublic),
+                ["globalBuffs"] = typeof(BuffLoader).GetField("globalBuffs", BindingFlags.Static | BindingFlags.NonPublic)
+            });
+
+            fieldCache.Add(typeof(ItemLoader), new Dictionary<string, FieldInfo>()
+            {
+                ["items"] = typeof(ItemLoader).GetField("items", BindingFlags.Static | BindingFlags.NonPublic),
+                ["globalItems"] = typeof(ItemLoader).GetField("globalItems", BindingFlags.Static | BindingFlags.NonPublic)
+            });
+
+            fieldCache.Add(typeof(NPCLoader), new Dictionary<string, FieldInfo>()
+            {
+                ["npcs"] = typeof(NPCLoader).GetField("npcs", BindingFlags.Static | BindingFlags.NonPublic),
+                ["globalNPCs"] = typeof(NPCLoader).GetField("globalItems", BindingFlags.Static | BindingFlags.NonPublic)
+            });
+
+            fieldCache.Add(typeof(ProjectileLoader), new Dictionary<string, FieldInfo>()
+            {
+                ["projectiles"] = typeof(ProjectileLoader).GetField("projectiles", BindingFlags.Static | BindingFlags.NonPublic),
+                ["globalProjectiles"] = typeof(ProjectileLoader).GetField("globalProjectiles", BindingFlags.Static | BindingFlags.NonPublic)
+            });
+
+            fieldCache.Add(typeof(TileLoader), new Dictionary<string, FieldInfo>()
+            {
+                ["tiles"] = typeof(TileLoader).GetField("tiles", BindingFlags.Static | BindingFlags.NonPublic),
+                ["globalTiles"] = typeof(TileLoader).GetField("globalTiles", BindingFlags.Static | BindingFlags.NonPublic),
+                ["trees"] = typeof(TileLoader).GetField("trees", BindingFlags.Static | BindingFlags.NonPublic),
+                ["palmTrees"] = typeof(TileLoader).GetField("palmTrees", BindingFlags.Static | BindingFlags.NonPublic),
+                ["cacti"] = typeof(TileLoader).GetField("cacti", BindingFlags.Static | BindingFlags.NonPublic)
+            });
+
+            fieldCache.Add(typeof(WallLoader), new Dictionary<string, FieldInfo>()
+            {
+                ["walls"] = typeof(WallLoader).GetField("items", BindingFlags.Static | BindingFlags.NonPublic),
+                ["globalWalls"] = typeof(WallLoader).GetField("globalItems", BindingFlags.Static | BindingFlags.NonPublic)
+            });
+
+            fieldCache.Add(typeof(ModDust), new Dictionary<string, FieldInfo>()
+            {
+                ["dusts"] = typeof(ModDust).GetField("dusts", BindingFlags.Static | BindingFlags.NonPublic)
+            });
+
+            fieldCache.Add(typeof(ModTileEntity), new Dictionary<string, FieldInfo>()
+            {
+                ["tileEntities"] = typeof(ModTileEntity).GetField("tileEntities", BindingFlags.Static | BindingFlags.NonPublic)
+            });
+
+            
         }
     }
 }
