@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using InfinityCore.API.Interface;
 using Terraria;
 using Terraria.GameContent.UI.States;
 using Terraria.ModLoader;
@@ -12,6 +13,8 @@ namespace InfinityCore.Helper.ReflectionHelper
 
     static partial class ReflectionHelper
     {
+        internal static bool InfinityCoreReflectionCache = true; 
+
         internal static Dictionary<Type, Dictionary<string, Delegate>> methodCache = new Dictionary<Type, Dictionary<string, Delegate>>();
         internal static Dictionary<Type, Dictionary<string, PropertyInfo>> propertyCache = new Dictionary<Type, Dictionary<string, PropertyInfo>>();
         internal static Dictionary<Type, Dictionary<string, FieldInfo>> fieldCache = new Dictionary<Type, Dictionary<string, FieldInfo>>();
@@ -52,6 +55,37 @@ namespace InfinityCore.Helper.ReflectionHelper
             }
         }
 
+        internal static void CachesAllReflection(Assembly asm)
+        {
+            if (asm.GetTypes().Any(t => t.Name == "ReflectionHelper" || t.Name == "ReflectionCaches"))
+            {
+                Type[] reflectionHelperType = asm.GetTypes().Where(t => t.Name == "ReflectionHelper" || t.Name == "ReflectionCaches").ToArray();
+                foreach (Type type in reflectionHelperType)
+                {
+                    if (type.GetField("InfinityCoreReflectionCache", BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public) != null)
+                    {
+                        MethodInfo AddFieldInfoCaches = type.GetMethod("AddFieldInfoCaches", BindingFlags.Static | BindingFlags.NonPublic);
+                        if (AddFieldInfoCaches != null)
+                        {
+                            AddFieldInfoCaches.Invoke(null, new[] {fieldCache});
+                        }
+
+                        MethodInfo AddMethodInfoCaches = type.GetMethod("AddMethodInfoCaches", BindingFlags.Static | BindingFlags.NonPublic);
+                        if (AddMethodInfoCaches != null)
+                        {
+                            AddMethodInfoCaches.Invoke(null, new[] {methodCache});
+                        }
+
+                        MethodInfo AddPropertyInfoCaches = type.GetMethod("AddPropertyInfoCaches", BindingFlags.Static | BindingFlags.NonPublic);
+                        if (AddPropertyInfoCaches != null)
+                        {
+                            AddPropertyInfoCaches.Invoke(null, new[] {propertyCache});
+                        }
+                    }
+                }
+            }
+        }
+
         internal static void InvokeAllStaticUnload()
         {
             foreach (Delegate unload in staticUnload)
@@ -64,7 +98,7 @@ namespace InfinityCore.Helper.ReflectionHelper
 
         internal static void Load()
         {
-            LoadWorldSelectionReflection();
+
         }
 
         internal static void PostLoad()
@@ -72,7 +106,7 @@ namespace InfinityCore.Helper.ReflectionHelper
             if (ModLoader.Mods.Any(i => i.Name == "SubworldLibrary"))
             {
                 Mod mod = ModLoader.GetMod("SubworldLibrary");
-                ReflectionHelper.fieldCache.Add(mod.GetModWorld("SLWorld").GetType(), new Dictionary<string, FieldInfo>()
+                fieldCache.Add(mod.GetModWorld("SLWorld").GetType(), new Dictionary<string, FieldInfo>()
                 {
                     ["generator"] = mod.GetModWorld("SLWorld").GetType().GetField("generator", BindingFlags.NonPublic | BindingFlags.Static)
                 });
@@ -86,13 +120,8 @@ namespace InfinityCore.Helper.ReflectionHelper
             methodCache.Clear();
         }
 
-        private static void LoadWorldSelectionReflection()
-        {
-            AddFieldInfoCaches();
-            AddMethodInfoCaches();
-        }
 
-        private static void AddMethodInfoCaches()
+        private static void AddMethodInfoCaches(Dictionary<Type, Dictionary<string, Delegate>> methodCache)
         {
             methodCache.Add(typeof(UIWorldSelect), new Dictionary<string, Delegate>()
             {
@@ -100,7 +129,7 @@ namespace InfinityCore.Helper.ReflectionHelper
             });
         }
 
-        private static void AddFieldInfoCaches()
+        private static void AddFieldInfoCaches(Dictionary<Type, Dictionary<string, FieldInfo>> fieldCache)
         {
             fieldCache.Add(typeof(UIWorldSelect), new Dictionary<string, FieldInfo>()
             {
@@ -161,8 +190,6 @@ namespace InfinityCore.Helper.ReflectionHelper
             {
                 ["tileEntities"] = typeof(ModTileEntity).GetField("tileEntities", BindingFlags.Static | BindingFlags.NonPublic)
             });
-
-            
         }
     }
 }
