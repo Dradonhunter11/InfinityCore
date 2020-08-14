@@ -12,7 +12,7 @@ using Terraria.ObjectData;
 
 namespace InfinityCore.API.Pots
 {
-    abstract class ModPots : ModTile
+    public abstract class ModPots : ModTile
     {
         public abstract int width { get; }
         public abstract int height { get; }
