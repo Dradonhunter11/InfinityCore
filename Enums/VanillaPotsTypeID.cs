@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace InfinityCore.Enums
 {
-    public enum PotsTypeID : byte
+    public enum PotsTypeID
     {
         Surface = 0,
         Ice = 1,

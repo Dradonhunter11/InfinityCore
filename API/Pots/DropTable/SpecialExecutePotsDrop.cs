@@ -2,7 +2,7 @@
 
 namespace InfinityCore.API.Pots.DropTable
 {
-    class SpecialExecutePotsDrop : PotsDrop
+    public class SpecialExecutePotsDrop : PotsDrop
     {
         private Action<int, int> execute;
 

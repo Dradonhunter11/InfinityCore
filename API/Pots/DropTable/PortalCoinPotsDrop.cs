@@ -2,7 +2,7 @@
 
 namespace InfinityCore.API.Pots.DropTable
 {
-    class PortalCoinPotsDrop : PotsDrop
+    public class PortalCoinPotsDrop : PotsDrop
     {
         public PortalCoinPotsDrop(int dropChance) : base("PortalCoin", (int x, int y) => { return Main.rand.Next(dropChance) == 0; })
         {

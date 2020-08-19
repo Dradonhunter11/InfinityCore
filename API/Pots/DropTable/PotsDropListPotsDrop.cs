@@ -4,7 +4,7 @@ using Terraria;
 
 namespace InfinityCore.API.Pots.DropTable
 {
-    class PotsDropListPotsDrop : PotsDrop
+    public class PotsDropListPotsDrop : PotsDrop
     {
         private List<PotsDrop> possibleDropsList = new List<PotsDrop>();
 

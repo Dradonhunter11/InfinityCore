@@ -17,7 +17,7 @@ namespace InfinityCore.API.Pots
         /// key = Tiles<br />
         /// Value = Pots style
         /// </summary>
-        private static Dictionary<int, int[]> vanillaPotsStyle = new Dictionary<int, int[]>();
+        private static Dictionary<int, PotsTileID[]> vanillaPotsStyle = new Dictionary<int, PotsTileID[]>();
         private static Dictionary<int, ModPots[]> moddedPotsStyle = new Dictionary<int, ModPots[]>();
         
 
@@ -26,11 +26,69 @@ namespace InfinityCore.API.Pots
         static PotsRegistery()
         {
             RegisterVanillaDrop();
+            RegisterVanillaPotsStyle();
         }
 
         public static bool IsPots(int type)
         {
             return dropTable.ContainsKey(type);
+        }
+
+        public static void RegisterVanillaPotsStyle()
+        {
+            #region Vanilla pots
+            vanillaPotsStyle.Add(TileID.Dirt, new []{PotsTileID.surface_0, PotsTileID.surface_1, PotsTileID.surface_2, PotsTileID.surface_3});
+            vanillaPotsStyle.Add(TileID.Stone, new []{PotsTileID.surface_0, PotsTileID.surface_1, PotsTileID.surface_2, PotsTileID.surface_3});
+            vanillaPotsStyle.Add(TileID.Silt, new []{PotsTileID.surface_0, PotsTileID.surface_1, PotsTileID.surface_2, PotsTileID.surface_3});
+            vanillaPotsStyle.Add(TileID.Grass, new []{PotsTileID.surface_0, PotsTileID.surface_1, PotsTileID.surface_2, PotsTileID.surface_3});
+            #endregion
+
+            #region Ice pots
+            vanillaPotsStyle.Add(TileID.SnowBlock, new []{PotsTileID.ice_0, PotsTileID.ice_1, PotsTileID.ice_2});
+            vanillaPotsStyle.Add(TileID.BreakableIce, new []{PotsTileID.ice_0, PotsTileID.ice_1, PotsTileID.ice_2});
+            vanillaPotsStyle.Add(TileID.IceBlock, new []{PotsTileID.ice_0, PotsTileID.ice_1, PotsTileID.ice_2});
+            #endregion
+
+            #region Jungle pots
+            vanillaPotsStyle.Add(TileID.JungleGrass, new []{PotsTileID.jungle_0, PotsTileID.jungle_1, PotsTileID.jungle_2});
+            #endregion
+
+            #region Dungeon pots
+            vanillaPotsStyle.Add(TileID.BlueDungeonBrick, new []{PotsTileID.dungeon_0, PotsTileID.dungeon_1, PotsTileID.dungeon_2});
+            vanillaPotsStyle.Add(TileID.GreenDungeonBrick, new []{PotsTileID.dungeon_0, PotsTileID.dungeon_1, PotsTileID.dungeon_2});
+            vanillaPotsStyle.Add(TileID.PinkDungeonBrick, new []{PotsTileID.dungeon_0, PotsTileID.dungeon_1, PotsTileID.dungeon_2});
+            #endregion
+
+            #region Corruption pots
+            vanillaPotsStyle.Add(TileID.CorruptGrass, new []{PotsTileID.corrupt_0, PotsTileID.corrupt_1, PotsTileID.corrupt_2});
+            vanillaPotsStyle.Add(TileID.Demonite, new []{PotsTileID.corrupt_0, PotsTileID.corrupt_1, PotsTileID.corrupt_2});
+            vanillaPotsStyle.Add(TileID.Ebonstone, new []{PotsTileID.corrupt_0, PotsTileID.corrupt_1, PotsTileID.corrupt_2});
+            //Added by Inf core to be more linear with crimson
+            vanillaPotsStyle.Add(TileID.CorruptIce,  new []{PotsTileID.corrupt_0, PotsTileID.corrupt_1, PotsTileID.corrupt_2});
+            #endregion
+
+            #region Crimson pots
+            vanillaPotsStyle.Add(TileID.FleshGrass, new []{PotsTileID.crimson_0, PotsTileID.crimson_1, PotsTileID.crimson_2});
+            vanillaPotsStyle.Add(TileID.Crimtane, new []{PotsTileID.crimson_0, PotsTileID.crimson_1, PotsTileID.crimson_2});
+            vanillaPotsStyle.Add(TileID.Crimstone, new []{PotsTileID.crimson_0, PotsTileID.crimson_1, PotsTileID.crimson_2});
+            vanillaPotsStyle.Add(TileID.FleshIce, new []{PotsTileID.crimson_0, PotsTileID.crimson_1, PotsTileID.crimson_2});
+            #endregion
+
+            #region Marble pots
+            vanillaPotsStyle.Add(TileID.Marble, new []{PotsTileID.marble_0, PotsTileID.marble_1, PotsTileID.marble_2});
+            #endregion
+
+            #region Lihzahrd pots
+            vanillaPotsStyle.Add(TileID.LihzahrdBrick, new []{PotsTileID.lihzard_0, PotsTileID.lihzard_1, PotsTileID.lihzard_2});
+            #endregion
+
+            //The whole reason I made mod pots in the first place
+            #region Underworld Pots
+            vanillaPotsStyle.Add(TileID.ObsidianBrick, new []{PotsTileID.hell_0, PotsTileID.hell_1, PotsTileID.hell_2});
+            vanillaPotsStyle.Add(TileID.Ash, new []{PotsTileID.hell_0, PotsTileID.hell_1, PotsTileID.hell_2});
+            vanillaPotsStyle.Add(TileID.Hellstone, new []{PotsTileID.hell_0, PotsTileID.hell_1, PotsTileID.hell_2});
+            vanillaPotsStyle.Add(TileID.HellstoneBrick, new []{PotsTileID.hell_0, PotsTileID.hell_1, PotsTileID.hell_2});
+            #endregion
         }
 
         public static void RegisterPotsDrop(int potsType, PotsDrop drop)

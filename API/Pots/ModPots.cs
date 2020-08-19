@@ -70,7 +70,7 @@ namespace InfinityCore.API.Pots
                 return false;
 
             for (int m = x; m < x + width; m++) {
-                for (int n = y; n < y + width; n++) {
+                for (int n = y; n < y + height; n++) {
                     if (Main.tile[m, n].type == 28 && Main.tile[m, n].active())
                     {
                         Main.tile[m, n].type = 0;

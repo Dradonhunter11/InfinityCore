@@ -31,6 +31,91 @@ namespace InfinityCore.Worlds
 
         public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight)
         {
+            int pots = tasks.FindIndex(i => i.Name == "pots");
+
+            if (pots != -1)
+            {
+                tasks[pots] = new PassLegacy("pots", delegate (GenerationProgress progress)
+                {
+                    Main.tileSolid[137] = true;
+                    Main.tileSolid[130] = true;
+                    progress.Message = Lang.gen[35].Value;
+                    for (int num262 = 0; num262 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.0008); num262++)
+                    {
+                        float num263 = (float)((double)num262 / ((double)(Main.maxTilesX * Main.maxTilesY) * 0.0008));
+                        progress.Set(num263);
+                        bool flag18 = false;
+                        int num264 = 0;
+                        while (!flag18)
+                        {
+                            int num265 = WorldGen.genRand.Next((int)WorldGen.worldSurfaceHigh, Main.maxTilesY - 10);
+                            if ((double)num263 > 0.93)
+                                num265 = Main.maxTilesY - 150;
+                            else if ((double)num263 > 0.75)
+                                num265 = (int)WorldGen.worldSurfaceLow;
+
+                            int num266 = WorldGen.genRand.Next(1, Main.maxTilesX);
+                            bool flag19 = false;
+                            for (int num267 = num265; num267 < Main.maxTilesY; num267++)
+                            {
+                                if (!flag19)
+                                {
+                                    if (Main.tile[num266, num267].active() && Main.tileSolid[Main.tile[num266, num267].type] && !Main.tile[num266, num267 - 1].lava())
+                                        flag19 = true;
+                                }
+                                else
+                                {
+                                    int style = WorldGen.genRand.Next(0, 4);
+                                    int tileType = 0;
+                                    if (num267 < Main.maxTilesY - 5)
+                                        tileType = Main.tile[num266, num267 + 1].type;
+
+                                    if (tileType == 147 || tileType == 161 || tileType == 162)
+                                        style = WorldGen.genRand.Next(4, 7);
+
+                                    if (tileType == 60)
+                                        style = WorldGen.genRand.Next(7, 10);
+
+                                    if (Main.wallDungeon[Main.tile[num266, num267].wall])
+                                        style = WorldGen.genRand.Next(10, 13);
+
+                                    if (tileType == 41 || tileType == 43 || tileType == 44)
+                                        style = WorldGen.genRand.Next(10, 13);
+
+                                    if (tileType == 22 || tileType == 23 || tileType == 25)
+                                        style = WorldGen.genRand.Next(16, 19);
+
+                                    if (tileType == 199 || tileType == 203 || tileType == 204 || tileType == 200)
+                                        style = WorldGen.genRand.Next(22, 25);
+
+                                    if (tileType == 367)
+                                        style = WorldGen.genRand.Next(31, 34);
+
+                                    if (tileType == 226)
+                                        style = WorldGen.genRand.Next(28, 31);
+
+                                    if (num267 > Main.maxTilesY - 200)
+                                        style = WorldGen.genRand.Next(13, 16);
+
+                                    if (WorldGen.PlacePot(num266, num267, 28, style))
+                                    {
+                                        flag18 = true;
+                                        break;
+                                    }
+
+                                    num264++;
+                                    if (num264 >= 10000)
+                                    {
+                                        flag18 = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
             preChunkGeneration = true;
             specialPostChunkGenPasses.Clear();
             if (worldGenType == "default")

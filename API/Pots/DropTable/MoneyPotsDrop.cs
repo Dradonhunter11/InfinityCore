@@ -4,7 +4,7 @@ using Terraria;
 namespace InfinityCore.API.Pots.DropTable
 {
     public delegate void ModifyMoneyAmount(int x, int y, ref float money);
-    sealed class MoneyPotsDrop : PotsDrop
+    public sealed class MoneyPotsDrop : PotsDrop
     {
         public event ModifyMoneyAmount modifyAmount;
         
